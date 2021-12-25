@@ -1,4 +1,4 @@
-package Simulation;
+package Simulation.agents;
 
 public abstract class LivingCreature {
 
@@ -9,7 +9,10 @@ public abstract class LivingCreature {
     }
 
     public void setLifePoints(int lifePoints) {
-        this.lifePoints = lifePoints;
+        this.lifePoints = this.lifePoints + lifePoints;
     }
 
+    public abstract void spendTime();
+
+    public abstract void getsEaten();
 }
