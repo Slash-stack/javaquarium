@@ -13,6 +13,10 @@ public class Fish extends LivingCreature {
         return name;
     }
 
+    public String getSpecies() {
+        return species;
+    }
+
     public boolean isMale() {
         return male;
     }
@@ -33,6 +37,22 @@ public class Fish extends LivingCreature {
         this.species = knownSpecies[species];
         this.male = sex;
         this.isCarnivorous = isCarnivorous;
+    }
+
+    public Fish(String name, String species, boolean sex, boolean isCarnivorous, int age) {
+        this.name = name;
+        this.species = species;
+        this.male = sex;
+        this.isCarnivorous = isCarnivorous;
+        this.setAge(age);
+    }
+
+    public Fish(String name, int species, boolean sex, boolean isCarnivorous, int age) {
+        this.name = name;
+        this.species = knownSpecies[species];
+        this.male = sex;
+        this.isCarnivorous = isCarnivorous;
+        this.setAge(age);
     }
 
     public void eat(LivingCreature livingCreature) {
@@ -64,13 +84,15 @@ public class Fish extends LivingCreature {
         String s = this.name;
         s+= " is a " + this.species;
         s+= (male) ? " male " : " female ";
-        s+= "with " + this.getLifePoints() + "HP.";
+        s+= "aged " + this.getAge();
+        s+= " with " + this.getLifePoints() + "HP.";
         return s;
     }
 
     @Override
     public void spendTime() {
         this.setLifePoints(-1);
+        this.advanceAge();
     }
 
     @Override

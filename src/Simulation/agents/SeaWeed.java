@@ -9,6 +9,11 @@ public class SeaWeed extends LivingCreature {
     public SeaWeed(){
         this.id = UUID.randomUUID();
     }
+    public SeaWeed(int lifePoints){
+        this.id = UUID.randomUUID();
+        this.setLifePoints(-10 + lifePoints);
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -26,6 +31,16 @@ public class SeaWeed extends LivingCreature {
     @Override
     public void spendTime() {
         this.setLifePoints(1);
+        this.advanceAge();
+    }
+
+    public int split(){
+        if (this.getLifePoints() >= 10) {
+            int newHP = this.getLifePoints()/2;
+            this.setLifePoints(-newHP);
+            return newHP;
+        }
+        return 0;
     }
 
     @Override

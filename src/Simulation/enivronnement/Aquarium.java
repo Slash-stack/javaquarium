@@ -70,17 +70,32 @@ public class Aquarium {
         round++;
         ArrayList<SeaWeed> eatenSeaWeed = new ArrayList<>();
         ArrayList<Fish> eatenFish = new ArrayList<>();
+        ArrayList<Fish> newFish = new ArrayList<>();
+        ArrayList<SeaWeed> newSeaWeed = new ArrayList<>();
         // update life points
         for (Fish f : fishSet) {
             f.spendTime();
         }
         for (SeaWeed s : seaWeedSet) {
             s.spendTime();
+            if (s.getAge() >= 20) {
+                eatenSeaWeed.add(s);
+            } else {
+                int newHP = s.split();
+                if (newHP != 0) newSeaWeed.add(new SeaWeed(newHP));
+            }
         }
+        seaWeedSet.removeAll(eatenSeaWeed);
+        eatenSeaWeed.clear();
 
         Iterator<Fish> iterFish = fishSet.iterator();
         while (iterFish.hasNext()) {
             Fish fish = iterFish.next();
+            // fish is too old
+            if (fish.getAge() >= 20){
+                eatenFish.add(fish);
+                continue;
+            }
             // the fish needs to eat
             if (fish.getLifePoints() <= 5) {
                 if (fish.isCarnivorous()) {
@@ -96,15 +111,24 @@ public class Aquarium {
                         if (food.getLifePoints() <= 0) eatenSeaWeed.add(food);
                     }
                 }
+            } else {
+                // n'a pas faim
+                Fish love = selectRandomFish();
+                if (fish.getSpecies().equals(love.getSpecies()) && fish.isMale() == !love.isMale()) {
+                    newFish.add(new Fish(fish.getName() + love.getName(), fish.getSpecies(), r.nextInt(2) == 1, fish.isCarnivorous()));
+                }
             }
         }
         fishSet.removeAll(eatenFish);
         seaWeedSet.removeAll(eatenSeaWeed);
+        fishSet.addAll(newFish);
+        seaWeedSet.addAll(newSeaWeed);
     }
 
     @Override
     public String toString() {
-        String s = "The aquarium contains ";
+        String s = "============================= Round " + this.getRound() + " =====================================\n";
+        s+= "The aquarium contains ";
         s+= seaWeedSet.size();
         s+= " sea weeds and the following fishs :\n";
         for (Fish f : fishSet) {
